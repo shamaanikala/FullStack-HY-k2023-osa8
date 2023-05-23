@@ -38,3 +38,35 @@ query {
     author
   }
 }
+
+mutation {
+  addBook(
+    title: "NoSQL Distilled"
+    author: "Martin Fowler"
+    published: 2012
+    genres: ["database", "nosql"]
+  ) {
+    title
+    author
+  }
+}
+
+mutation {
+  addBook(
+    title: "Pimeyden tango"
+    author: "Reijo Mäki"
+    published: 1997
+    genres: ["crime"]
+  ) {
+    title
+    author
+  }
+}
+
+query {
+  allAuthors {
+    name
+    born
+    bookCount
+  }
+}
