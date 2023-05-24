@@ -111,6 +111,7 @@ const typeDefs = `
 
   type Author {
     name: String!
+    born: Int
     id: ID!
     bookCount: Int!
   }
@@ -123,6 +124,10 @@ const typeDefs = `
   }
 
   type Mutation {
+    addAuthor(
+      name: String!
+      born: Int
+    ): Author
     addBook(
       title: String!
       author: String!
@@ -152,9 +157,20 @@ const resolvers = {
     },
   },
   Mutation: {
+    addAuthor: (root, args) => {
+      const author = { ...args, id: uuid() }
+      authors = authors.concat(author)
+      return author
+    },
     addBook: (root, args) => {
       const book = { ...args, id: uuid() }
       books = books.concat(book)
+      const author = args.author
+      // miten kutsua addAuthor tässä?
+      if (!authors.map(a => a.name).includes(author)) {
+        const newAuthor = { name: author, id: uuid() }
+        authors = authors.concat(newAuthor)
+      }
       return book
     },
   },
