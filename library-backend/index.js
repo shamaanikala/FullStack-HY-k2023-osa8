@@ -157,13 +157,13 @@ const resolvers = {
     },
   },
   Mutation: {
-    addAuthor: (root, args) => addAuthorTemplate(root, args),
+    addAuthor: (root, args) => addAuthorMutation(root, args),
     addBook: (root, args) => {
       const book = { ...args, id: uuid() }
       books = books.concat(book)
       const author = args.author
       if (!authors.map(a => a.name).includes(author)) {
-        addAuthorTemplate(root, { name: author })
+        addAuthorMutation(root, { name: author })
       }
       return book
     },
@@ -172,7 +172,7 @@ const resolvers = {
 
 // jollakulla toisella sama ongelma?:
 // https://stackoverflow.com/questions/74089885/call-graphql-mutation-from-another-mutation
-const addAuthorTemplate = (root, args) => {
+const addAuthorMutation = (root, args) => {
   const author = { ...args, id: uuid() }
   authors = authors.concat(author)
   return author
