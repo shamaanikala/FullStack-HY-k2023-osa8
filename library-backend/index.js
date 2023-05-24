@@ -134,6 +134,10 @@ const typeDefs = `
       published: Int!
       genres: [String!]!
     ): Book
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ): Author
   }
 `
 
@@ -166,6 +170,19 @@ const resolvers = {
         addAuthorMutation(root, { name: author })
       }
       return book
+    },
+    editAuthor: (root, { name, setBornTo }) => {
+      //const { name: author, setBornTo: born } = args // tällä saa author ja born destrukturoitua
+      const updatedAuthor = {
+        name,
+        born: setBornTo,
+      }
+      if (authors.map(a => a.name).includes(name)) {
+        // oletetaan, että kaimoja ei löydy
+        authors = authors.map(a => (a.name !== name ? a : updatedAuthor))
+        return updatedAuthor
+      }
+      return null
     },
   },
 }
