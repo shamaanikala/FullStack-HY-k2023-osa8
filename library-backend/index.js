@@ -157,23 +157,25 @@ const resolvers = {
     },
   },
   Mutation: {
-    addAuthor: (root, args) => {
-      const author = { ...args, id: uuid() }
-      authors = authors.concat(author)
-      return author
-    },
+    addAuthor: (root, args) => addAuthorTemplate(root, args),
     addBook: (root, args) => {
       const book = { ...args, id: uuid() }
       books = books.concat(book)
       const author = args.author
-      // miten kutsua addAuthor tässä?
       if (!authors.map(a => a.name).includes(author)) {
-        const newAuthor = { name: author, id: uuid() }
-        authors = authors.concat(newAuthor)
+        addAuthorTemplate(root, { name: author })
       }
       return book
     },
   },
+}
+
+// jollakulla toisella sama ongelma?:
+// https://stackoverflow.com/questions/74089885/call-graphql-mutation-from-another-mutation
+const addAuthorTemplate = (root, args) => {
+  const author = { ...args, id: uuid() }
+  authors = authors.concat(author)
+  return author
 }
 
 const server = new ApolloServer({
