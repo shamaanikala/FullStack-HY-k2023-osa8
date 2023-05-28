@@ -18,6 +18,11 @@ const NewBook = props => {
   const submit = async event => {
     event.preventDefault()
 
+    // oma lisäys
+    if (genre.length > 0) {
+      return addGenre()
+    }
+
     console.log('add book...')
     createBook({ variables: { title, author, published, genres } })
 
