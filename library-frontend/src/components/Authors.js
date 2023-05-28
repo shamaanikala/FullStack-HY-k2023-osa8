@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Select from 'react-select'
 
 const SetBirthyearForm = () => {
-  const [name, setName] = useState('')
+  // const [name, setName] = useState('')
   const [born, setBorn] = useState('')
 
   const [setBirthyear] = useMutation(SET_BIRTHYEAR, {
@@ -33,9 +33,9 @@ const SetBirthyearForm = () => {
     event.preventDefault()
     console.log('update author')
 
-    setBirthyear({ variables: { name, setBornTo: born } })
+    setBirthyear({ variables: { name: selected.value, setBornTo: born } })
 
-    setName('')
+    // setName('')
     setBorn('')
   }
 
@@ -49,13 +49,6 @@ const SetBirthyearForm = () => {
             onChange={setSelected}
             options={options}
             placeholder={'Select author...'}
-          />
-        </div>
-        <div>
-          name{' '}
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
           />
         </div>
         <div>
