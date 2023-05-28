@@ -4,17 +4,24 @@ import { useState } from 'react'
 import Select from 'react-select'
 
 const SetBirthyearForm = () => {
-  // const [name, setName] = useState('')
   const [born, setBorn] = useState('')
+
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const [setBirthyear] = useMutation(SET_BIRTHYEAR, {
     refetchQueries: [ALL_AUTHORS],
+    onError: error => {
+      console.log(error.message)
+      //console.log(JSON.stringify(error))
+      if (error.graphQLErrors[0].extensions.code === 'BAD_USER_INPUT') {
+        if (error.message.includes('setBornTo')) {
+          setErrorMessage('born input value invalid!')
+        }
+      } else {
+        setErrorMessage(error.message)
+      }
+    },
   })
-
-  // const options = [
-  //   { value: 'reijomäki', label: 'Reijo Mäki' },
-  //   { value: 'author', label: 'Author name' },
-  // ]
 
   const [selected, setSelected] = useState(null)
 
@@ -22,21 +29,22 @@ const SetBirthyearForm = () => {
   const options = optionsQuery.loading
     ? [{ value: 'loading', label: 'Loading...' }]
     : optionsQuery.data.allAuthors.map(e => ({
-        //value: e.name.split(' ').join(''),
         value: e.name,
         label: e.name,
       }))
-
-  console.log(options)
 
   const submit = async event => {
     event.preventDefault()
     console.log('update author')
 
-    setBirthyear({ variables: { name: selected.value, setBornTo: born } })
+    if (!selected) {
+      setErrorMessage('Author must be selected!')
+      return
+    }
 
-    // setName('')
+    setBirthyear({ variables: { name: selected.value, setBornTo: born } })
     setBorn('')
+    setErrorMessage(null)
   }
 
   return (
@@ -44,6 +52,7 @@ const SetBirthyearForm = () => {
       <h3>Set birthyear</h3>
       <form onSubmit={submit}>
         <div>
+          <div style={{ color: 'red' }}>{errorMessage}</div>
           <Select
             defaultValue={selected}
             onChange={setSelected}
@@ -70,8 +79,6 @@ const Authors = props => {
   if (!props.show) {
     return null
   }
-  //const authors = []
-  console.log(result)
   const authors = result.loading ? [] : result.data.allAuthors
 
   return (
