@@ -1,5 +1,40 @@
 import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../queries'
+import { useState } from 'react'
+
+const SetBirthyearForm = () => {
+  const [name, setName] = useState('')
+  const [born, setBorn] = useState('')
+
+  const submit = async event => {
+    event.preventDefault()
+    console.log('update author')
+  }
+
+  return (
+    <div>
+      <h3>Set birthyear</h3>
+      <form onSubmit={submit}>
+        <div>
+          name{' '}
+          <input
+            value={name}
+            onChange={({ target }) => setName(target.value)}
+          />
+        </div>
+        <div>
+          born{' '}
+          <input
+            type="number"
+            value={born}
+            onChange={({ target }) => setBorn(target.value)}
+          />
+        </div>
+        <button type="submit">update author</button>
+      </form>
+    </div>
+  )
+}
 
 const Authors = props => {
   const result = useQuery(ALL_AUTHORS) // hookki pakko olla jo täällä
@@ -28,6 +63,7 @@ const Authors = props => {
           ))}
         </tbody>
       </table>
+      <SetBirthyearForm />
     </div>
   )
 }
