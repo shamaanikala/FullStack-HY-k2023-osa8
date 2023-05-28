@@ -1,10 +1,18 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { ALL_AUTHORS, SET_BIRTHYEAR } from '../queries'
 import { useState } from 'react'
+import Select from 'react-select'
 
 const SetBirthyearForm = () => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
+
+  const options = [
+    { value: 'reijomäki', label: 'Reijo Mäki' },
+    { value: 'author', label: 'Author name' },
+  ]
+
+  const [selected, setSelected] = useState(null)
 
   const [setBirthyear] = useMutation(SET_BIRTHYEAR, {
     refetchQueries: [ALL_AUTHORS],
@@ -24,6 +32,13 @@ const SetBirthyearForm = () => {
     <div>
       <h3>Set birthyear</h3>
       <form onSubmit={submit}>
+        <div>
+          <Select
+            defaultValue={selected}
+            onChange={setSelected}
+            options={options}
+          />
+        </div>
         <div>
           name{' '}
           <input
