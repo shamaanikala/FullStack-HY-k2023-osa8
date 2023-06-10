@@ -91,11 +91,9 @@ const resolvers = {
   Mutation: {
     addBook: async (root, args) => {
       const { author, ...newBookObject } = args
-      //console.log(newBookObject)
       const authorId = await Author.findOne({ name: author }, '_id')
       if (!authorId) {
         const newAuthor = await addAuthorOperation(root, { name: author })
-        //console.log(newAuthor)
         const newBook = new Book({
           ...newBookObject,
           author: newAuthor._id,
@@ -110,18 +108,22 @@ const resolvers = {
       await newBook.save()
       return newBook
     },
-    editAuthor: (root, { name, setBornTo }) => {
-      //const { name: author, setBornTo: born } = args // tällä saa author ja born destrukturoitua
-      if (authors.map(a => a.name).includes(name)) {
-        // oletetaan, että kaimoja ei löydy
-        const author = authors.find(a => a.name === name)
+    editAuthor: async (root, { name, setBornTo }) => {
+      const author = await Author.findOne({ name: name })
+      if (author) {
+        // if (Author.where(name).exists()) {
+        //   console.log('myös Author.where(name).exists() löytää', name)
+        // }
         const updatedAuthor = {
-          ...author,
           name,
           born: setBornTo,
         }
-        authors = authors.map(a => (a.name !== name ? a : updatedAuthor))
-        return updatedAuthor
+        const result = await Author.findByIdAndUpdate(
+          author._id,
+          updatedAuthor,
+          { new: true }
+        )
+        return result
       }
       return null
     },
