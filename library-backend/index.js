@@ -171,7 +171,7 @@ const resolvers = {
     allBooks: (root, args) => {
       const author = args.author
       const genre = args.genre
-      const result = !author ? books : books.filter(b => b.author === author)
+      const result = !author ? Book.find({}) : Book.find({ author: author })
       return !genre
         ? result
         : result.filter(b => b.genres.some(g => g === genre))
