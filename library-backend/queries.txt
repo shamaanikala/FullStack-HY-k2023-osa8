@@ -77,3 +77,14 @@ mutation {
     born
   }
 }
+
+mutation {
+  addBook(
+    title: "Tiedon filosofia antiikista nykyaikaan"
+    author: "Riku Juti"
+    published: 2013
+    genres: ["philosophy", "fact", "epistemology"]
+  ) {
+    title
+  }
+}

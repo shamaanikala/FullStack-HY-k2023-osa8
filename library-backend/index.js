@@ -187,13 +187,25 @@ const resolvers = {
   Mutation: {
     addAuthor: async (root, args) => await addAuthorOperation(root, args),
     addBook: async (root, args) => {
-      const book = new Book({ ...args })
-      await book.save()
-      const authorName = args.author
-      if (Author.find().exists(authorName, false)) {
-        await addAuthorOperation(root, { name: authorName })
+      const { author, ...newBookObject } = args
+      //console.log(newBookObject)
+      const authorId = await Author.findOne({ name: author }, '_id')
+      if (!authorId) {
+        const newAuthor = await addAuthorOperation(root, { name: author })
+        //console.log(newAuthor)
+        const newBook = new Book({
+          ...newBookObject,
+          author: newAuthor._id,
+        })
+        await newBook.save()
+        return newBook
       }
-      return book
+      const newBook = new Book({
+        ...newBookObject,
+        author: authorId._id,
+      })
+      await newBook.save()
+      return newBook
     },
     editAuthor: (root, { name, setBornTo }) => {
       //const { name: author, setBornTo: born } = args // tällä saa author ja born destrukturoitua
