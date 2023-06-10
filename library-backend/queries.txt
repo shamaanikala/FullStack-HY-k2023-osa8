@@ -6,7 +6,19 @@ query {
 query {
   allBooks {
     title
-    author
+    published
+    genres
+  }
+}
+
+
+query {
+  allBooks {
+    title
+    author {
+      name
+      born
+    }
     published
     genres
   }
@@ -26,16 +38,50 @@ query {
 }
 
 query {
+  allBooks(author: "Robert Martin") {
+    title
+    author {
+      name
+      born
+      bookCount
+    }
+    genres
+  }
+}
+
+query {
   allBooks(genre: "refactoring") {
     title
-    author
+    author {
+      name
+    }
+  }
+}
+
+query {
+  allBooks(genre: "database") {
+    title
+  }
+}
+
+query {
+  allBooks(genre: "nosql") {
+    title
+  }
+}
+
+query {
+  allBooks(genre: "fact") {
+    title
   }
 }
 
 query {
   allBooks(author: "Robert Martin", genre: "refactoring") {
     title
-    author
+    author {
+      name
+    }
   }
 }
 
@@ -47,7 +93,9 @@ mutation {
     genres: ["database", "nosql"]
   ) {
     title
-    author
+    author {
+      name
+    }
   }
 }
 
@@ -59,7 +107,6 @@ mutation {
     genres: ["crime"]
   ) {
     title
-    author
   }
 }
 

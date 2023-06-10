@@ -72,7 +72,7 @@ const resolvers = {
       const genre = args.genre
       // rakennetaan query json
       let query = author ? { author: authorId._id } : {}
-      query = genre ? { ...query, genres: [genre] } : query
+      query = genre ? { ...query, genres: { $all: [genre] } } : query
       const result = await Book.find(query).populate('author', {
         name: 1,
         born: 1,
