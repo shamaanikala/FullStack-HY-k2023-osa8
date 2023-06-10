@@ -168,10 +168,12 @@ const resolvers = {
     // mutta en löytänyt mitään syytä tai perustelua tuon käyttöön
     bookCount: async () => Book.countDocuments(),
     authorCount: async () => Author.countDocuments(),
-    allBooks: (root, args) => {
+    allBooks: async (root, args) => {
       const author = args.author
       const genre = args.genre
-      const result = !author ? Book.find({}) : Book.find({ author: author })
+      const result = !author
+        ? await Book.find({})
+        : await Book.find({ author: author })
       return !genre
         ? result
         : result.filter(b => b.genres.some(g => g === genre))
