@@ -128,8 +128,10 @@ const saveAuthor = async author => {
 }
 
 const saveBook = async book => {
-  const { id, ...newBookObject } = book
-  const newBook = new Book(newBookObject)
+  const { id, author, ...newBookObject } = book
+  const authorId = await Author.findOne({ name: author }, '_id')
+  const newBook = new Book({ ...newBookObject, author: authorId._id })
+  //console.log({ ...newBookObject, author: authorId._id })
   await newBook.save()
 }
 
@@ -186,19 +188,6 @@ const mongooseConnect = async uri => {
     )
   }
 }
-
-// console.log('mongoose-populate.js: connecting to', MONGODB_URI)
-// mongoose
-//   .connect(MONGODB_URI)
-//   .then(() => {
-//     console.log('mongoose-populate.js: connected to MongoDB')
-//   })
-//   .catch(error => {
-//     console.log(
-//       'mongoose-populate.js: error connecting to MongoDB:',
-//       error.message
-//     )
-//   })
 
 const populate = async (uri, authors, books, dryrun) => {
   await mongooseConnect(uri)
