@@ -88,3 +88,14 @@ mutation {
     title
   }
 }
+
+mutation {
+  addAuthor(
+    name: "Aleksis Kivi"
+    born: 1834
+  ) {
+    name
+    born
+    id
+  }
+}
