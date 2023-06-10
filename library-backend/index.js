@@ -72,10 +72,11 @@ const resolvers = {
     authorCount: async () => Author.countDocuments(),
     allBooks: async (root, args) => {
       const author = args.author
+      const authorId = await Author.findOne({ name: author }, '_id')
       const genre = args.genre
       const result = !author
         ? await Book.find({})
-        : await Book.find({ author: author }) // TODO tarkista että toimii
+        : await Book.find({ author: authorId._id })
       return !genre // TOODO muuta mongodb
         ? result
         : result.filter(b => b.genres.some(g => g === genre))
@@ -83,7 +84,6 @@ const resolvers = {
     allAuthors: async () => Author.find({}),
   },
   Author: {
-    // TODO ei koskettu T8.13
     bookCount: async ({ name }) => {
       const authorId = await Author.findOne({ name: name }, '_id')
       const bookCount = await Book.countDocuments({ author: authorId._id })
