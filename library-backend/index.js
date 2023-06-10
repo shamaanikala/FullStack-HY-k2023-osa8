@@ -46,10 +46,6 @@ const typeDefs = `
   }
 
   type Mutation {
-    addAuthor(
-      name: String!
-      born: Int
-    ): Author
     addBook(
       title: String!
       author: String!
@@ -93,7 +89,6 @@ const resolvers = {
     },
   },
   Mutation: {
-    addAuthor: async (root, args) => await addAuthorOperation(root, args),
     addBook: async (root, args) => {
       const { author, ...newBookObject } = args
       //console.log(newBookObject)
