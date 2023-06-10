@@ -74,15 +74,14 @@ const resolvers = {
       const author = args.author
       const authorId = await Author.findOne({ name: author }, '_id')
       const genre = args.genre
-      const result = !author
-        ? await Book.find({}).populate('author', { name: 1, born: 1 })
-        : await Book.find({ author: authorId._id }).populate('author', {
-            name: 1,
-            born: 1,
-          })
-      return !genre // TOODO muuta mongodb
-        ? result
-        : result.filter(b => b.genres.some(g => g === genre))
+      // rakennetaan query json
+      let query = author ? { author: authorId._id } : {}
+      query = genre ? { ...query, genres: [genre] } : query
+      const result = await Book.find(query).populate('author', {
+        name: 1,
+        born: 1,
+      })
+      return result
     },
     allAuthors: async () => Author.find({}),
   },
