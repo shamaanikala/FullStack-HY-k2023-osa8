@@ -173,14 +173,15 @@ const resolvers = {
       const genre = args.genre
       const result = !author
         ? await Book.find({})
-        : await Book.find({ author: author })
-      return !genre
+        : await Book.find({ author: author }) // TODO tarkista että toimii
+      return !genre // TOODO muuta mongodb
         ? result
         : result.filter(b => b.genres.some(g => g === genre))
     },
     allAuthors: async () => Author.find({}),
   },
   Author: {
+    // TODO ei koskettu T8.13
     bookCount: ({ name }) => {
       return books.filter(b => b.author === name).length
     },
