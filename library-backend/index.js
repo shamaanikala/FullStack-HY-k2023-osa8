@@ -178,7 +178,7 @@ const resolvers = {
         ? result
         : result.filter(b => b.genres.some(g => g === genre))
     },
-    allAuthors: () => authors,
+    allAuthors: async () => Author.find({}),
   },
   Author: {
     bookCount: ({ name }) => {
