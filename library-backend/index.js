@@ -187,13 +187,13 @@ const resolvers = {
     },
   },
   Mutation: {
-    addAuthor: (root, args) => addAuthorMutation(root, args),
+    addAuthor: async (root, args) => await addAuthorOperation(root, args),
     addBook: (root, args) => {
       const book = { ...args, id: uuid() }
       books = books.concat(book)
       const author = args.author
       if (!authors.map(a => a.name).includes(author)) {
-        addAuthorMutation(root, { name: author })
+        addAuthorOperation(root, { name: author })
       }
       return book
     },
@@ -217,9 +217,9 @@ const resolvers = {
 
 // jollakulla toisella sama ongelma?:
 // https://stackoverflow.com/questions/74089885/call-graphql-mutation-from-another-mutation
-const addAuthorMutation = (root, args) => {
-  const author = { ...args, id: uuid() }
-  authors = authors.concat(author)
+const addAuthorOperation = async (root, args) => {
+  const author = new Author({ ...args })
+  await author.save()
   return author
 }
 
