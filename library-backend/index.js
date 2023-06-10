@@ -163,7 +163,10 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
+    // materiaalissa käytetään MongoDB:n collection, jolloin
+    // tämä voisi olla Book.collection.countDocuments()
+    // mutta en löytänyt mitään syytä tai perustelua tuon käyttöön
+    bookCount: async () => Book.countDocuments(),
     authorCount: () => authors.length,
     allBooks: (root, args) => {
       const author = args.author
