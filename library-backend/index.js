@@ -2,8 +2,6 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 
-const { v1: uuid } = require('uuid')
-
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 
@@ -188,12 +186,12 @@ const resolvers = {
   },
   Mutation: {
     addAuthor: async (root, args) => await addAuthorOperation(root, args),
-    addBook: (root, args) => {
-      const book = { ...args, id: uuid() }
-      books = books.concat(book)
-      const author = args.author
-      if (!authors.map(a => a.name).includes(author)) {
-        addAuthorOperation(root, { name: author })
+    addBook: async (root, args) => {
+      const book = new Book({ ...args })
+      await book.save()
+      const authorName = args.author
+      if (Author.find().exists(authorName, false)) {
+        await addAuthorOperation(root, { name: authorName })
       }
       return book
     },
