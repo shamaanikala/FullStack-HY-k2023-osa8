@@ -61,6 +61,8 @@ const typeDefs = `
   }
 `
 
+// Author.where(name).exists()
+
 const resolvers = {
   Query: {
     // materiaalissa käytetään MongoDB:n collection, jolloin
@@ -118,10 +120,6 @@ const resolvers = {
     editAuthor: async (root, { name, setBornTo }) => {
       const author = await Author.findOne({ name: name })
       if (author) {
-        // if (Author.where(name).exists()) {
-        //   console.log('myös Author.where(name).exists() löytää', name)
-        // }
-
         author.born = setBornTo
         // tämä virheenkäsittely ei ainakaan nyt tee paljon mitään,
         // sillä syntymävuodelle ei anneta mitään vaatimuksia ja
