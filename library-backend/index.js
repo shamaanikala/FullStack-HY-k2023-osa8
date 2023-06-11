@@ -136,7 +136,17 @@ const resolvers = {
 // https://stackoverflow.com/questions/74089885/call-graphql-mutation-from-another-mutation
 const addAuthorOperation = async (root, args) => {
   const author = new Author({ ...args })
-  await author.save()
+  try {
+    await author.save()
+  } catch (error) {
+    throw new GraphQLError('Adding new author failed', {
+      extensions: {
+        code: 'BAD_USER_INPUT',
+        invalidArgs: args,
+        error,
+      },
+    })
+  }
   return author
 }
 
