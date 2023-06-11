@@ -7,6 +7,7 @@ const LoginForm = props => {
   const [password, setPassword] = useState('')
 
   const setToken = props.setToken
+  const setPage = props.setPage
 
   const [login, result] = useMutation(LOGIN, {
     onError: error => {
@@ -19,6 +20,11 @@ const LoginForm = props => {
       const token = result.data.login.value
       setToken(token)
       localStorage.setItem('library-user-token', token)
+
+      setUsername('')
+      setPassword('')
+
+      setPage('authors')
     }
   }, [result.data]) // eslint-disable-line
 
