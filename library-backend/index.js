@@ -100,7 +100,17 @@ const resolvers = {
           ...newBookObject,
           author: newAuthor._id,
         })
-        await newBook.save()
+        try {
+          await newBook.save()
+        } catch (error) {
+          throw new GraphQLError('Saving new book failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args,
+              error,
+            },
+          })
+        }
         return newBook
       }
       const newBook = new Book({
@@ -135,18 +145,6 @@ const resolvers = {
         }
 
         return author
-
-        // ei käytetä findByIdAndUpdate, jotta saadaan validaatiot
-        // const updatedAuthor = {
-        //   name,
-        //   born: setBornTo,
-        // }
-        // const result = await Author.findByIdAndUpdate(
-        //   author._id,
-        //   updatedAuthor,
-        //   { new: true }
-        // )
-        // return result
       }
       return null
     },
