@@ -144,7 +144,9 @@ const resolvers = {
       }
       return newBook
     },
-    editAuthor: async (root, { name, setBornTo }) => {
+    editAuthor: async (root, { name, setBornTo }, context) => {
+      checkAuthentication(context)
+
       const author = await Author.findOne({ name: name })
       if (author) {
         author.born = setBornTo
