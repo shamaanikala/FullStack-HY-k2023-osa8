@@ -14,6 +14,9 @@ const App = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
+    if (page === 'add') {
+      setPage('authors')
+    }
   }
 
   return (
