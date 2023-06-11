@@ -82,6 +82,8 @@ const Authors = props => {
   if (!props.show) {
     return null
   }
+  const token = props.token
+
   const authors = result.loading ? [] : result.data.allAuthors
 
   return (
@@ -103,7 +105,7 @@ const Authors = props => {
           ))}
         </tbody>
       </table>
-      <SetBirthyearForm />
+      {token && <SetBirthyearForm />}
     </div>
   )
 }
