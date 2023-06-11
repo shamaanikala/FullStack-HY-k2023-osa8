@@ -11,15 +11,16 @@ const SetBirthyearForm = () => {
   const [setBirthyear] = useMutation(SET_BIRTHYEAR, {
     refetchQueries: [ALL_AUTHORS],
     onError: error => {
-      console.log(error.message)
+      console.log('useMutation.onError: ', error.message)
+      // console.log(error)
+      // console.log(error.graphQLErrors)
       //console.log(JSON.stringify(error))
       if (error.graphQLErrors[0].extensions.code === 'BAD_USER_INPUT') {
         if (error.message.includes('setBornTo')) {
           setErrorMessage('born input value invalid!')
         }
-      } else {
-        setErrorMessage(error.message)
       }
+      setErrorMessage(error.message)
     },
   })
 
@@ -44,7 +45,9 @@ const SetBirthyearForm = () => {
 
     setBirthyear({ variables: { name: selected.value, setBornTo: born } })
     setBorn('')
-    setErrorMessage(null)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 7000)
   }
 
   return (
