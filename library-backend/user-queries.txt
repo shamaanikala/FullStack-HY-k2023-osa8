@@ -1,0 +1,19 @@
+mutation {
+  createUser (
+    username: "mluukkai"
+    favoriteGenre: "refactoring"
+  ) {
+    username
+    id
+  }
+}
+
+mutation {
+  createUser (
+    username: "rmaki"
+    favoriteGenre: "turku"
+  ) {
+    username
+    id
+  }
+}
