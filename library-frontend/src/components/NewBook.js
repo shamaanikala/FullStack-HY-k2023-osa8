@@ -10,8 +10,9 @@ const NewBook = props => {
   const [genres, setGenres] = useState([])
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    // refetchQueries: [ALL_AUTHORS, ALL_BOOKS],
-    refetchQueries: [ALL_AUTHORS], // haetaan nämä aina
+    // uudelleenhaetaan kirjailijat, koska niitä voi tulla uusi
+    // tai olemassaolevalle pitää laskea uusi kirjojen lukumäärä
+    refetchQueries: [ALL_AUTHORS],
     update: (cache, response) => {
       cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
         return {
