@@ -93,31 +93,26 @@ const resolvers = {
   Mutation: {
     addBook: async (root, args) => {
       const { author, ...newBookObject } = args
-      const authorId = await Author.findOne({ name: author }, '_id')
+      let authorId = await Author.findOne({ name: author }, '_id')
       if (!authorId) {
         const newAuthor = await addAuthorOperation(root, { name: author })
-        const newBook = new Book({
-          ...newBookObject,
-          author: newAuthor._id,
-        })
-        try {
-          await newBook.save()
-        } catch (error) {
-          throw new GraphQLError('Saving new book failed', {
-            extensions: {
-              code: 'BAD_USER_INPUT',
-              invalidArgs: args,
-              error,
-            },
-          })
-        }
-        return newBook
+        authorId = newAuthor._id
       }
       const newBook = new Book({
         ...newBookObject,
         author: authorId._id,
       })
-      await newBook.save()
+      try {
+        await newBook.save()
+      } catch (error) {
+        throw new GraphQLError('Saving new book failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args,
+            error,
+          },
+        })
+      }
       return newBook
     },
     editAuthor: async (root, { name, setBornTo }) => {
