@@ -116,16 +116,34 @@ const resolvers = {
         // if (Author.where(name).exists()) {
         //   console.log('myös Author.where(name).exists() löytää', name)
         // }
-        const updatedAuthor = {
-          name,
-          born: setBornTo,
+
+        author.born = setBornTo
+
+        try {
+          await author.save()
+        } catch (error) {
+          throw new GraphQLError('Editing author failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: { name, setBornTo },
+              error,
+            },
+          })
         }
-        const result = await Author.findByIdAndUpdate(
-          author._id,
-          updatedAuthor,
-          { new: true }
-        )
-        return result
+
+        return author
+
+        // ei käytetä findByIdAndUpdate, jotta saadaan validaatiot
+        // const updatedAuthor = {
+        //   name,
+        //   born: setBornTo,
+        // }
+        // const result = await Author.findByIdAndUpdate(
+        //   author._id,
+        //   updatedAuthor,
+        //   { new: true }
+        // )
+        // return result
       }
       return null
     },

@@ -32,6 +32,22 @@ query {
 }
 
 query {
+  allAuthors {
+    name
+    born
+    bookCount
+  }
+}
+
+mutation {
+  editAuthor(name: "Joshua Kerievsky", setBornTo: 1967) {
+    name
+    born
+    bookCount
+  }
+}
+
+query {
   allBooks(author: "Robert Martin") {
     title
   }
@@ -131,6 +147,28 @@ mutation {
     author: "Riku Juti"
     published: 2013
     genres: ["philosophy", "fact", "epistemology"]
+  ) {
+    title
+  }
+}
+
+mutation {
+  addBook(
+    title: "Seitsemän veljestä"
+    author: "Aleksis Kivi"
+    published: 1870
+    genres: ["novel", "finnish classic"]
+  ) {
+    title
+  }
+}
+
+mutation {
+  addBook(
+    title: "The Lord of the Rings 2"
+    author: "J.R"
+    published: 1954
+    genres: ["fantasy"]
   ) {
     title
   }
