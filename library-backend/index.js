@@ -9,6 +9,9 @@ mongoose.set('strictQuery', false)
 
 const Author = require('./models/author')
 const Book = require('./models/book')
+const User = require('./models/user')
+
+const jwt = require('jsonwebtoken')
 
 require('dotenv').config()
 
@@ -159,6 +162,20 @@ const resolvers = {
         return author
       }
       return null
+    },
+
+    createUser: async (root, { username, favoriteGenre }) => {
+      const user = new User({ username, favoriteGenre })
+
+      return user.save().catch(error => {
+        throw new GraphQLError('Creating a new user failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: { username, favoriteGenre },
+            error,
+          },
+        })
+      })
     },
   },
 }

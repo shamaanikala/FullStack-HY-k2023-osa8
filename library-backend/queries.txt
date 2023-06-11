@@ -47,6 +47,14 @@ mutation {
   }
 }
 
+mutation {
+  editAuthor(name: "Joshua Kerievsky", setBornTo: null) {
+    name
+    born
+    bookCount
+  }
+}
+
 query {
   allBooks(author: "Robert Martin") {
     title
@@ -125,6 +133,29 @@ mutation {
     title
   }
 }
+
+mutation {
+  addBook(
+    title: "Åbo"
+    author: "Reijo Mäki"
+    published: 2023
+    genres: ["crime", "turku"]
+  ) {
+    title
+  }
+}
+
+mutation {
+  addBook(
+    title: "Osasto H - Pääkaupungin salainen joukko-osasto"
+    author: "Atso Haapanen"
+    published: 2019
+    genres: ["history", "military history", "war history", "Helsinki", "WWII", "continuation war"]
+  ) {
+    title
+  }
+}
+
 
 query {
   allAuthors {
