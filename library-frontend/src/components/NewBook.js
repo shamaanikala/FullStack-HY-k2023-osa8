@@ -20,7 +20,9 @@ const NewBook = props => {
   const submit = async event => {
     event.preventDefault()
 
-    // oma lisäys
+    // Jos lommakkeella painetaan Enter kun genre kentässä on tekstiä
+    // lisätään tällöin genre genrelistaan eikä vielä lähetetä lomaketta.
+    // Jos genrekenttä on tyhjä, lähetetään lomake.
     if (genre.length > 0) {
       return addGenre()
     }
