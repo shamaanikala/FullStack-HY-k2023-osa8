@@ -17,3 +17,41 @@ mutation {
     id
   }
 }
+
+mutation {
+  login (
+    username: "mluukkai"
+    password: "salainen"
+  ) {
+    value
+  }
+}
+
+query {
+  me {
+    username
+    favoriteGenre
+  }
+}
+
+mutation {
+  addBook(
+    title: "Åbo"
+    author: "Reijo Mäki"
+    published: 2023
+    genres: ["crime", "turku"]
+  ) {
+    title
+  }
+}
+
+mutation {
+  addBook(
+    title: "Pahan suudelma"
+    author: "Reijo Mäki"
+    published: 1998
+    genres: ["crime", "turku", "crappy"]
+  ) {
+    title
+  }
+}
