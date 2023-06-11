@@ -142,6 +142,8 @@ const resolvers = {
           },
         })
       }
+      // populate ennen return, koska fronend ei muuten saa Author.name
+      await newBook.populate('author', { name: 1 })
       return newBook
     },
     editAuthor: async (root, { name, setBornTo }, context) => {
