@@ -10,12 +10,22 @@ const NewBook = props => {
   const [genres, setGenres] = useState([])
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [ALL_AUTHORS, ALL_BOOKS],
+    // refetchQueries: [ALL_AUTHORS, ALL_BOOKS],
+    refetchQueries: [ALL_AUTHORS], // haetaan nämä aina
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(response.data.addBook),
+        }
+      })
+    },
   })
 
   if (!props.show) {
     return null
   }
+
+  const setPage = props.setPage
 
   const submit = async event => {
     event.preventDefault()
@@ -35,6 +45,8 @@ const NewBook = props => {
     setAuthor('')
     setGenres([])
     setGenre('')
+
+    setPage('authors')
   }
 
   const addGenre = () => {
