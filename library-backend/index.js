@@ -119,14 +119,7 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args, context) => {
-      const currentUser = context.currentUser
-      if (!currentUser) {
-        throw new GraphQLError('not authenticated', {
-          extensions: {
-            code: 'BAD_USER_INPUT',
-          },
-        })
-      }
+      checkAuthentication(context)
 
       const { author, ...newBookObject } = args
       let authorId = await Author.findOne({ name: author }, '_id')
@@ -227,6 +220,18 @@ const addAuthorOperation = async (root, args) => {
     })
   }
   return author
+}
+
+const checkAuthentication = context => {
+  const currentUser = context.currentUser
+  if (!currentUser) {
+    throw new GraphQLError('not authenticated', {
+      extensions: {
+        code: 'BAD_USER_INPUT',
+      },
+    })
+  }
+  return true
 }
 
 const server = new ApolloServer({
