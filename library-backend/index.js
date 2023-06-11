@@ -118,7 +118,10 @@ const resolvers = {
         // }
 
         author.born = setBornTo
-
+        // tämä virheenkäsittely ei ainakaan nyt tee paljon mitään,
+        // sillä syntymävuodelle ei anneta mitään vaatimuksia ja
+        // huonot ei lukuarvoiset mutation kyselyt GraphQL:n validaatio
+        // nappaa itse kiinni
         try {
           await author.save()
         } catch (error) {
