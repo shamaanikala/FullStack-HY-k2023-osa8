@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { ALL_GENRES } from '../queries'
-import { useEffect, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 
 const parseGenres = query => {
   // query.data.allBooks sisältää taulukon olioita, joissa on
@@ -21,10 +21,11 @@ const parseGenres = query => {
   return result
 }
 
-const Genres = props => {
+const Genres = forwardRef((props, ref) => {
   const [genres, setGenres] = useState([])
   const [genreSelection, setGenreSelection] = useState('all genres')
   const genresQuery = useQuery(ALL_GENRES)
+  // ref = genreSelection
   // console.log(genresQuery)
 
   useEffect(() => {
@@ -46,13 +47,12 @@ const Genres = props => {
     // console.log('handleChecked', genre)
   }
 
-  if (!props.show) {
-    return null
-  }
+  // if (!props.show) {
+  //   return null
+  // }
 
   return (
-    <div>
-      <h3>genret</h3>
+    <div ref={genreSelection}>
       <form onChange={({ target }) => genreFilter(target.value)}>
         <fieldset>
           <div>
@@ -75,7 +75,7 @@ const Genres = props => {
       </form>
     </div>
   )
-}
+})
 
 export default Genres
 

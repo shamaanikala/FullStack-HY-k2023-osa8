@@ -33,7 +33,6 @@ const App = () => {
       <Authors show={page === 'authors'} token={token} />
 
       <Books show={page === 'books'} />
-      <Genres show={page === 'books'} />
       <NewBook show={page === 'add'} setPage={setPage} />
 
       <LoginForm
