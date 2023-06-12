@@ -15,10 +15,14 @@ const NewBook = props => {
     refetchQueries: [ALL_AUTHORS, ALL_GENRES],
     update: (cache, response) => {
       cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        console.log('createBook:cache.updateQuery', cache)
         return {
           allBooks: allBooks.concat(response.data.addBook),
         }
       })
+    },
+    onQueryUpdated(observalbeQuery) {
+      return observalbeQuery.refetch()
     },
   })
 
