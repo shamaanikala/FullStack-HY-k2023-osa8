@@ -15,7 +15,7 @@ const App = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
-    if (page === 'add') {
+    if (page === 'add' || page === 'recommend') {
       setPage('authors')
     }
   }
