@@ -22,26 +22,9 @@ const parseGenres = query => {
 }
 
 const Genres = props => {
-  // const [genres, setGenres] = useState([])
-  // const [genreSelection, setGenreSelection] = useState('all genres')
-  // const genresQuery = useQuery(ALL_GENRES)
-  // console.log(genresQuery)
-
-  // useEffect(() => {
-  //   genresQuery.loading
-  //     ? setGenres(['loading...'])
-  //     : setGenres(parseGenres(genresQuery.data.allBooks).concat('all genres'))
-  // }, [setGenres, genresQuery]) // eslint-disable-line
-
-  // console.log(genres)
-
   const genres = props.genres
   const genreSelection = props.genreSelection
   const genreFilter = props.genreFilter
-  // const genreFilter = genre => {
-  //   console.log('genreFilter', genre)
-  //   setGenreSelection(genre)
-  // }
 
   const handleChecked = (genreSelection, genre) => {
     // tämä on tarpeeton, mutta React haluaa, että inputissa
@@ -81,7 +64,6 @@ const Books = props => {
   const [genres, setGenres] = useState([])
   const [genreSelection, setGenreSelection] = useState('all genres')
   const genresQuery = useQuery(ALL_GENRES)
-  // console.log(genresQuery)
 
   useEffect(() => {
     genresQuery.loading
@@ -89,18 +71,10 @@ const Books = props => {
       : setGenres(parseGenres(genresQuery.data.allBooks).concat('all genres'))
   }, [setGenres, genresQuery]) // eslint-disable-line
 
-  // console.log(genres)
-
   const genreFilter = genre => {
     console.log('genreFilter', genre)
     setGenreSelection(genre)
   }
-
-  // const handleChecked = (genreSelection, genre) => {
-  //   // tämä on tarpeeton, mutta React haluaa, että inputissa
-  //   // on onChange funktio, jotta input on kontrolloitu alusta asti
-  //   // console.log('handleChecked', genre)
-  // }
 
   if (!props.show) {
     return null
