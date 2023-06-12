@@ -41,7 +41,9 @@ const Genres = props => {
   }
 
   const handleChecked = (genreSelection, genre) => {
-    console.log('handleChecked', genre)
+    // tämä on tarpeeton, mutta React haluaa, että inputissa
+    // on onChange funktio, jotta input on kontrolloitu alusta asti
+    // console.log('handleChecked', genre)
   }
 
   if (!props.show) {
