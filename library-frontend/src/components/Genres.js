@@ -23,6 +23,7 @@ const parseGenres = query => {
 
 const Genres = props => {
   const [genres, setGenres] = useState([])
+  const [genreSelection, setGenreSelection] = useState(null)
   const genresQuery = useQuery(ALL_GENRES)
   console.log(genresQuery)
 
@@ -34,8 +35,9 @@ const Genres = props => {
 
   console.log(genres)
 
-  const genreFilter = event => {
-    console.log('genreFilter', event)
+  const genreFilter = genre => {
+    console.log('genreFilter', genre)
+    setGenreSelection(genre)
   }
 
   if (!props.show) {
@@ -50,7 +52,11 @@ const Genres = props => {
           <div>
             {genres.map(genre => (
               <span key={genre}>
-                <input type="radio" value={genre} id={genre} />
+                {genreSelection && genreSelection === genre ? (
+                  <input type="radio" value={genre} id={genre} checked />
+                ) : (
+                  <input type="radio" value={genre} id={genre} />
+                )}
                 <label>{genre}</label>
               </span>
             ))}
