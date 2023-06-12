@@ -34,6 +34,10 @@ const Genres = props => {
 
   console.log(genres)
 
+  const genreFilter = event => {
+    console.log('genreFilter', event)
+  }
+
   if (!props.show) {
     return null
   }
@@ -41,17 +45,18 @@ const Genres = props => {
   return (
     <div>
       <h3>genret</h3>
-      <fieldset>
-        <div>
-          {genres.map(genre => (
-            <span>
-              <input type="radio" value={genre} key={genre} />
-              <label>{genre}</label>
-            </span>
-          ))}
-        </div>
-      </fieldset>
-      <h3>{genres.length}</h3>
+      <form onChange={({ target }) => genreFilter(target.value)}>
+        <fieldset>
+          <div>
+            {genres.map(genre => (
+              <span key={genre}>
+                <input type="radio" value={genre} id={genre} />
+                <label>{genre}</label>
+              </span>
+            ))}
+          </div>
+        </fieldset>
+      </form>
     </div>
   )
 }
