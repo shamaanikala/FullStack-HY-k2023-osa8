@@ -30,7 +30,7 @@ const Genres = props => {
     genresQuery.loading
       ? setGenres(['loading...'])
       : setGenres(parseGenres(genresQuery.data.allBooks))
-  }, [setGenres, genresQuery.data.allBooks]) // eslint-disable-line
+  }, [setGenres, genresQuery]) // eslint-disable-line
 
   console.log(genres)
 
