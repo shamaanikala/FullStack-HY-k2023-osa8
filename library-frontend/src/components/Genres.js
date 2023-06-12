@@ -1,58 +1,12 @@
-import { useQuery } from '@apollo/client'
-import { ALL_GENRES } from '../queries'
-import { forwardRef, useEffect, useState } from 'react'
-
-const parseGenres = query => {
-  // query.data.allBooks sisältää taulukon olioita, joissa on
-  // kussakin taulukko genres. Ladataan nämä yksittäiset genret
-  // JavaScriptin joukkoon:
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
-
-  let genreSet = new Set()
-  console.log(query)
-  for (const bookObject of query) {
-    for (const genre of bookObject.genres) {
-      genreSet.add(genre)
-    }
-  }
-  console.log(genreSet)
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from
-  const result = Array.from(genreSet)
-  return result
-}
-
-const Genres = forwardRef((props, ref) => {
-  const [genres, setGenres] = useState([])
-  const [genreSelection, setGenreSelection] = useState('all genres')
-  const genresQuery = useQuery(ALL_GENRES)
-  // ref = genreSelection
-  // console.log(genresQuery)
-
-  useEffect(() => {
-    genresQuery.loading
-      ? setGenres(['loading...'])
-      : setGenres(parseGenres(genresQuery.data.allBooks).concat('all genres'))
-  }, [setGenres, genresQuery]) // eslint-disable-line
-
-  // console.log(genres)
-
-  const genreFilter = genre => {
-    console.log('genreFilter', genre)
-    setGenreSelection(genre)
-  }
-
+const Genres = ({ genres, genreSelection, genreFilter }) => {
   const handleChecked = (genreSelection, genre) => {
     // tämä on tarpeeton, mutta React haluaa, että inputissa
     // on onChange funktio, jotta input on kontrolloitu alusta asti
     // console.log('handleChecked', genre)
   }
 
-  // if (!props.show) {
-  //   return null
-  // }
-
   return (
-    <div ref={genreSelection}>
+    <div>
       <form onChange={({ target }) => genreFilter(target.value)}>
         <fieldset>
           <div>
@@ -75,12 +29,6 @@ const Genres = forwardRef((props, ref) => {
       </form>
     </div>
   )
-})
+}
 
 export default Genres
-
-// {genreSelection && genreSelection === genre ? (
-//                   <input type="radio" value={genre} id={genre} checked />
-//                 ) : (
-//                   <input type="radio" value={genre} id={genre} />
-//                 )}
