@@ -34,13 +34,14 @@ const Books = props => {
   }, [setGenres, genresQuery]) // eslint-disable-line
 
   const result = useQuery(ALL_BOOKS, {
-    variables: { genreSelection },
+    variables: { genre: genreSelection },
   })
   // const result = useQuery(BOOKS_BY_GENRE)
 
   const genreFilter = genre => {
     console.log('genreFilter', genre)
     genre === 'all genres' ? setGenreSelection(null) : setGenreSelection(genre)
+    result.refetch({ genre: genreSelection })
   }
 
   if (!props.show) {
