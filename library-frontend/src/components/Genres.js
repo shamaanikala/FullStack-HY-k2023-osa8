@@ -16,7 +16,12 @@ const Genres = ({ genres, genreSelection, genreFilter }) => {
                   type="radio"
                   value={genre}
                   id={genre}
-                  checked={genre === genreSelection ? true : false}
+                  checked={
+                    genre === genreSelection ||
+                    (!genreSelection && genre === 'all genres')
+                      ? true
+                      : false
+                  }
                   onChange={({ target }) =>
                     handleChecked(genreSelection, target.checked)
                   }

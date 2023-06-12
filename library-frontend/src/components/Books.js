@@ -10,23 +10,21 @@ const parseGenres = query => {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 
   let genreSet = new Set()
-  console.log(query)
+  // console.log(query)
   for (const bookObject of query) {
     for (const genre of bookObject.genres) {
       genreSet.add(genre)
     }
   }
-  console.log(genreSet)
+  // console.log(genreSet)
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from
   const result = Array.from(genreSet)
   return result
 }
 
 const Books = props => {
-  const result = useQuery(ALL_BOOKS)
-
   const [genres, setGenres] = useState([])
-  const [genreSelection, setGenreSelection] = useState('all genres')
+  const [genreSelection, setGenreSelection] = useState(null)
   const genresQuery = useQuery(ALL_GENRES)
 
   useEffect(() => {
@@ -35,9 +33,14 @@ const Books = props => {
       : setGenres(parseGenres(genresQuery.data.allBooks).concat('all genres'))
   }, [setGenres, genresQuery]) // eslint-disable-line
 
+  const result = useQuery(ALL_BOOKS, {
+    variables: { genreSelection },
+  })
+  // const result = useQuery(BOOKS_BY_GENRE)
+
   const genreFilter = genre => {
     console.log('genreFilter', genre)
-    setGenreSelection(genre)
+    genre === 'all genres' ? setGenreSelection(null) : setGenreSelection(genre)
   }
 
   if (!props.show) {
@@ -49,7 +52,7 @@ const Books = props => {
   return (
     <div>
       <h2>books</h2>
-      {genreSelection !== 'all genres' && (
+      {genreSelection && (
         <p>
           in genre <b>{genreSelection}</b>
         </p>
