@@ -23,9 +23,9 @@ const parseGenres = query => {
 
 const Genres = props => {
   const [genres, setGenres] = useState([])
-  const [genreSelection, setGenreSelection] = useState(null)
+  const [genreSelection, setGenreSelection] = useState('all genres')
   const genresQuery = useQuery(ALL_GENRES)
-  console.log(genresQuery)
+  // console.log(genresQuery)
 
   useEffect(() => {
     genresQuery.loading
@@ -33,7 +33,7 @@ const Genres = props => {
       : setGenres(parseGenres(genresQuery.data.allBooks))
   }, [setGenres, genresQuery]) // eslint-disable-line
 
-  console.log(genres)
+  // console.log(genres)
 
   const genreFilter = genre => {
     console.log('genreFilter', genre)
@@ -50,6 +50,10 @@ const Genres = props => {
       <form onChange={({ target }) => genreFilter(target.value)}>
         <fieldset>
           <div>
+            <span>
+              <input type="radio" value="all genres" defaultChecked />
+              <label>all genres</label>
+            </span>
             {genres.map(genre => (
               <span key={genre}>
                 {genreSelection && genreSelection === genre ? (
