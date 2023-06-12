@@ -112,7 +112,7 @@ const resolvers = {
     },
     allGenres: async () => {
       const result = await Book.distinct('genres')
-      console.log('allGenres', result)
+      // console.log('allGenres', result)
       return result
     },
   },
