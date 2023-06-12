@@ -30,7 +30,7 @@ const Genres = props => {
   useEffect(() => {
     genresQuery.loading
       ? setGenres(['loading...'])
-      : setGenres(parseGenres(genresQuery.data.allBooks))
+      : setGenres(parseGenres(genresQuery.data.allBooks).concat('all genres'))
   }, [setGenres, genresQuery]) // eslint-disable-line
 
   // console.log(genres)
@@ -38,6 +38,10 @@ const Genres = props => {
   const genreFilter = genre => {
     console.log('genreFilter', genre)
     setGenreSelection(genre)
+  }
+
+  const handleChecked = (genreSelection, genre) => {
+    console.log('handleChecked', genre)
   }
 
   if (!props.show) {
@@ -50,17 +54,17 @@ const Genres = props => {
       <form onChange={({ target }) => genreFilter(target.value)}>
         <fieldset>
           <div>
-            <span>
-              <input type="radio" value="all genres" defaultChecked />
-              <label>all genres</label>
-            </span>
             {genres.map(genre => (
               <span key={genre}>
-                {genreSelection && genreSelection === genre ? (
-                  <input type="radio" value={genre} id={genre} checked />
-                ) : (
-                  <input type="radio" value={genre} id={genre} />
-                )}
+                <input
+                  type="radio"
+                  value={genre}
+                  id={genre}
+                  checked={genre === genreSelection ? true : false}
+                  onChange={({ target }) =>
+                    handleChecked(genreSelection, target.checked)
+                  }
+                />
                 <label>{genre}</label>
               </span>
             ))}
@@ -72,3 +76,9 @@ const Genres = props => {
 }
 
 export default Genres
+
+// {genreSelection && genreSelection === genre ? (
+//                   <input type="radio" value={genre} id={genre} checked />
+//                 ) : (
+//                   <input type="radio" value={genre} id={genre} />
+//                 )}
