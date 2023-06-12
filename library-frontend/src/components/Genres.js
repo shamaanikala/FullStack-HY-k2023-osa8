@@ -1,10 +1,4 @@
-const Genres = ({ genres, genreSelection, genreFilter }) => {
-  const handleChecked = (genreSelection, genre) => {
-    // tämä on tarpeeton, mutta React haluaa, että inputissa
-    // on onChange funktio, jotta input on kontrolloitu alusta asti
-    // console.log('handleChecked', genre)
-  }
-
+const Genres = ({ genres, genreSelection, genreFilter, handleChecked }) => {
   return (
     <div>
       <form onChange={({ target }) => genreFilter(target.value)}>
@@ -22,9 +16,7 @@ const Genres = ({ genres, genreSelection, genreFilter }) => {
                       ? true
                       : false
                   }
-                  onChange={({ target }) =>
-                    handleChecked(genreSelection, target.checked)
-                  }
+                  onChange={({ target }) => handleChecked(target.value)}
                 />
                 <label>{genre}</label>
               </span>

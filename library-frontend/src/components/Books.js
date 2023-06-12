@@ -25,6 +25,11 @@ const Books = props => {
   const [genreSelection, setGenreSelection] = useState(null)
   const genresQuery = useQuery(ALL_GENRES)
 
+  // Otetaan mallia Apollon manuaalista, miten haetaan muuttujan kanssa
+  // ja miten haetaan sen muuttuessa refetchillä:
+  // https://www.apollographql.com/docs/react/data/queries/#configuring-fetch-logic
+  // useLazyQuery niin päätetään itse milloin haetaan eikä tarvitse luottaa
+  // Reactin hakuun.
   const [getBooksByGenre, result] = useLazyQuery(ALL_BOOKS)
 
   useEffect(() => {
@@ -35,22 +40,20 @@ const Books = props => {
     getBooksByGenre()
   }, [setGenres, genresQuery]) // eslint-disable-line
 
-  // Otetaan mallia Apollon manuaalista, miten haetaan muuttujan kanssa
-  // ja miten haetaan sen muuttuessa refetchillä:
-  // https://www.apollographql.com/docs/react/data/queries/#configuring-fetch-logic
-  console.log(result)
-  // const [getBooksByGenre, result] = useLazyQuery(ALL_BOOKS, {
-  //   variables: { genre: genreSelection },
-  // })
-
   const genreFilter = selectedGenre => {
     console.log('genreFilter', selectedGenre)
     selectedGenre === 'all genres'
       ? setGenreSelection(null)
       : setGenreSelection(selectedGenre)
-    console.log('refetch: ', genreSelection)
-    // result.refetch({ genre: genreSelection })
-    getBooksByGenre({ variables: { genre: genreSelection } })
+  }
+
+  // tämä hoitaa useLazyQueryn vaatiman uudelleenhaun
+  // toimitaan heti kun radion valinta muuttuu eikä
+  // odoteta Reactin tilan päivitystä
+  const handleChecked = target => {
+    target !== 'all genres'
+      ? getBooksByGenre({ variables: { genre: target } })
+      : getBooksByGenre()
   }
 
   if (!props.show) {
@@ -87,6 +90,7 @@ const Books = props => {
         genreFilter={genreFilter}
         genres={genres}
         genreSelection={genreSelection}
+        handleChecked={handleChecked}
       />
     </div>
   )
