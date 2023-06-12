@@ -41,11 +41,14 @@ const Genres = props => {
   return (
     <div>
       <h3>genret</h3>
-      <ul>
+      <fieldset>
         {genres.map(genre => (
-          <li key={genre}>{genre}</li>
+          <div>
+            <input type="radio" value={genre} key={genre} />
+            <label>{genre}</label>
+          </div>
         ))}
-      </ul>
+      </fieldset>
       <h3>{genres.length}</h3>
     </div>
   )
