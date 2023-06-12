@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client'
+import { useQuery, useLazyQuery } from '@apollo/client'
 import { ALL_BOOKS, ALL_GENRES } from '../queries'
 import { useEffect, useState } from 'react'
 import Genres from './Genres'
@@ -10,13 +10,11 @@ const parseGenres = query => {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 
   let genreSet = new Set()
-  // console.log(query)
   for (const bookObject of query) {
     for (const genre of bookObject.genres) {
       genreSet.add(genre)
     }
   }
-  // console.log(genreSet)
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from
   const result = Array.from(genreSet)
   return result
@@ -27,21 +25,32 @@ const Books = props => {
   const [genreSelection, setGenreSelection] = useState(null)
   const genresQuery = useQuery(ALL_GENRES)
 
+  const [getBooksByGenre, result] = useLazyQuery(ALL_BOOKS)
+
   useEffect(() => {
     genresQuery.loading
       ? setGenres(['loading...'])
       : setGenres(parseGenres(genresQuery.data.allBooks).concat('all genres'))
+    // pakko kutsua useLazyQuerya itse nyt
+    getBooksByGenre()
   }, [setGenres, genresQuery]) // eslint-disable-line
 
-  const result = useQuery(ALL_BOOKS, {
-    variables: { genre: genreSelection },
-  })
-  // const result = useQuery(BOOKS_BY_GENRE)
+  // Otetaan mallia Apollon manuaalista, miten haetaan muuttujan kanssa
+  // ja miten haetaan sen muuttuessa refetchillä:
+  // https://www.apollographql.com/docs/react/data/queries/#configuring-fetch-logic
+  console.log(result)
+  // const [getBooksByGenre, result] = useLazyQuery(ALL_BOOKS, {
+  //   variables: { genre: genreSelection },
+  // })
 
-  const genreFilter = genre => {
-    console.log('genreFilter', genre)
-    genre === 'all genres' ? setGenreSelection(null) : setGenreSelection(genre)
-    result.refetch({ genre: genreSelection })
+  const genreFilter = selectedGenre => {
+    console.log('genreFilter', selectedGenre)
+    selectedGenre === 'all genres'
+      ? setGenreSelection(null)
+      : setGenreSelection(selectedGenre)
+    console.log('refetch: ', genreSelection)
+    // result.refetch({ genre: genreSelection })
+    getBooksByGenre({ variables: { genre: genreSelection } })
   }
 
   if (!props.show) {
