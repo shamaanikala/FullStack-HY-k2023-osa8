@@ -18,7 +18,7 @@ const Genres = ({ genres, genreSelection, genreFilter, handleChecked }) => {
                   }
                   onChange={({ target }) => handleChecked(target.value)}
                 />
-                <label>{genre}</label>
+                <label htmlFor={genre}>{genre}</label>
               </span>
             ))}
           </div>
