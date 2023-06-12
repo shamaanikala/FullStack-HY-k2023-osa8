@@ -24,7 +24,7 @@ const Books = props => {
   }, [setGenres, genresQuery]) // eslint-disable-line
 
   const genreFilter = selectedGenre => {
-    console.log('genreFilter', selectedGenre)
+    // console.log('genreFilter', selectedGenre)
     selectedGenre === 'all genres'
       ? setGenreSelection(null)
       : setGenreSelection(selectedGenre)
