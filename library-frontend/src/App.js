@@ -5,7 +5,7 @@ import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import { useApolloClient, useSubscription } from '@apollo/client'
 import Recommendations from './components/Recommendations'
-import { ALL_BOOKS, BOOK_ADDED } from './queries'
+import { ALL_BOOKS, AUTHOR_NAMES, BOOK_ADDED } from './queries'
 
 export const updateCache = (cache, query, addedBook) => {
   const uniqueId = book => {
@@ -23,6 +23,22 @@ export const updateCache = (cache, query, addedBook) => {
   })
 }
 
+export const updateAuthorsCache = (cache, query, addedBook) => {
+  const uniqueId = author => {
+    let seen = new Set()
+    return author.filter(b => {
+      let c = b.id
+      return seen.has(c) ? false : seen.add(c)
+    })
+  }
+
+  cache.updateQuery(query, ({ allAuthors }) => {
+    return {
+      allAuthors: uniqueId(allAuthors.concat(addedBook.author)),
+    }
+  })
+}
+
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
@@ -30,11 +46,12 @@ const App = () => {
 
   useSubscription(BOOK_ADDED, {
     onData: ({ data }) => {
-      // data.data.bookAdded.title
+      const bookAdded = data.data.bookAdded
       window.alert(`New book '${data.data.bookAdded.title}' added!`)
       console.log(data)
       // console.log(`kirja: ${data.data.bookAdded.title}`)
       updateCache(client.cache, { query: ALL_BOOKS }, data.data.bookAdded)
+      updateAuthorsCache(client.cache, { query: AUTHOR_NAMES }, bookAdded)
     },
   })
   const logout = () => {
