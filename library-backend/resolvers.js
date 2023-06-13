@@ -40,8 +40,11 @@ const resolvers = {
   },
   Author: {
     bookCount: async ({ name }) => {
-      const authorId = await Author.findOne({ name: name }, '_id')
-      const bookCount = await Book.countDocuments({ author: authorId._id })
+      // const authorId = await Author.findOne({ name: name }, '_id')
+      // const bookCount = await Book.countDocuments({ author: authorId._id })
+      // return bookCount
+      const author = await Author.findOne({ name: name }).populate('books')
+      const bookCount = author.books.length
       return bookCount
     },
   },
@@ -50,14 +53,16 @@ const resolvers = {
       checkAuthentication(context)
 
       const { author, ...newBookObject } = args
-      let authorId = await Author.findOne({ name: author }, '_id')
-      if (!authorId) {
+      // let authorObj = await Author.findOne({ name: author }, '_id')
+      let authorObj = await Author.findOne({ name: author })
+      if (!authorObj) {
         const newAuthor = await addAuthorOperation(root, { name: author })
-        authorId = newAuthor._id
+        // authorId = newAuthor._id
+        authorObj = newAuthor
       }
       const newBook = new Book({
         ...newBookObject,
-        author: authorId._id,
+        author: authorObj._id,
       })
       try {
         await newBook.save()
@@ -72,6 +77,10 @@ const resolvers = {
       }
       // populate ennen return, koska fronend ei muuten saa Author.name
       await newBook.populate('author', { name: 1 })
+      // lisätään kirjailijalle kirja listaan
+      console.log('authorObj', authorObj)
+      authorObj.books = authorObj.books.concat(newBook._id)
+      await authorObj.save()
 
       pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
 
