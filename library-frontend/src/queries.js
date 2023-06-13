@@ -18,6 +18,7 @@ export const BOOK_DETAILS = gql`
     author {
       name
       id
+      bookCount
     }
     published
     genres
@@ -78,6 +79,7 @@ export const AUTHOR_NAMES = gql`
   query {
     allAuthors {
       name
+      bookCount
       id
     }
   }
