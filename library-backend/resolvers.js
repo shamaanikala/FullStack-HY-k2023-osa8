@@ -78,7 +78,7 @@ const resolvers = {
       // populate ennen return, koska fronend ei muuten saa Author.name
       await newBook.populate('author', { name: 1 })
       // lisätään kirjailijalle kirja listaan
-      console.log('authorObj', authorObj)
+      // console.log('authorObj', authorObj)
       authorObj.books = authorObj.books.concat(newBook._id)
       await authorObj.save()
 
