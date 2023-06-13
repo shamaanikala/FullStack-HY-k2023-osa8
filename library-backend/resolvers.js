@@ -3,6 +3,8 @@ const Author = require('./models/author')
 const Book = require('./models/book')
 const User = require('./models/user')
 const jwt = require('jsonwebtoken')
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
 
 // Author.where(name).exists()
 
@@ -70,6 +72,9 @@ const resolvers = {
       }
       // populate ennen return, koska fronend ei muuten saa Author.name
       await newBook.populate('author', { name: 1 })
+
+      pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
+
       return newBook
     },
     editAuthor: async (root, { name, setBornTo }, context) => {
@@ -130,6 +135,11 @@ const resolvers = {
       }
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator('BOOK_ADDED'),
     },
   },
 }
